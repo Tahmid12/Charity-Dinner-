@@ -1,9 +1,8 @@
 <?php
-require "../templates/successfully_created_user.php";
 
 require '../config.php';
-
 require 'mysql_queries.php';
+require "../templates/successfully_created_user.php";
 
 // TODO use isset() to check if these exist
 $username = $_POST['username'];
