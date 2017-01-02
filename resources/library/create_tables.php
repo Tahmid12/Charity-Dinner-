@@ -1,18 +1,15 @@
 <?php
-$user = 'root';
-$password = 'root';
-$db_name = 'charity_dinner';
-$host = 'localhost';
-$port = 3306;
 
-$conn = new mysqli($host, $user, $password);
+require('../config.php');
+
+$conn = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['password']);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 if (!database_exists($conn)) {
-    create_database($conn, $db_name);
+    create_database($conn, $config['db']['name']);
 }
 
 if (!table_exists($conn)) {
@@ -23,7 +20,7 @@ $conn->close();
 
 function create_database($conn, $db_name) {
     $sql = "CREATE DATABASE " . $db_name;
-    if ($conn->query($sql) === TRUE) {
+    if ($conn->query($sql)) {
         echo "Database created successfully";
     } else {
         echo "Not successfull: " . $conn->error;
@@ -38,10 +35,10 @@ function create_table($conn) {
         password VARCHAR(50) NOT NULL,
     )";
 
-    if ($conn->query($sql) === TRUE) {
+    if ($conn->query($sql)) {
         echo "Table users has been created";
     } else {
-        echo "error in making table" . $conn->error;
+        echo "Error in making table" . $conn->error;
     }
 }
 
