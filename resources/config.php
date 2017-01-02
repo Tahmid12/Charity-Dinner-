@@ -6,6 +6,9 @@ $config = array(
     "name" => 'charity_dinner',
     "host" => 'localhost',
     "port" => 3306
+  ),
+  'tables' => array(
+    "users" => "users"
   )
 );
 
