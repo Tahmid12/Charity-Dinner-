@@ -1,4 +1,5 @@
 <?php
+require "../templates/successfully_created_user.php";
 
 // TODO use isset() to check if these exist
 $username = $_POST['username'];
@@ -10,7 +11,7 @@ if (!user_exists($username, $email)) {
     if (!$created) {
         die("Error: User couldn't be created.");
     }
-    echo "User Account Created Successfully";
+    show_user_created();
 }
 
 function user_exists($username, $email) {
