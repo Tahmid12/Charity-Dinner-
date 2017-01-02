@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 }
 
 if (!database_exists($conn)) {
-    create_database($conn);
+    create_database($conn, $db_name);
 }
 
 if (!table_exists($conn)) {
@@ -21,7 +21,7 @@ if (!table_exists($conn)) {
 
 $conn->close();
 
-function create_database($conn) {
+function create_database($conn, $db_name) {
     $sql = "CREATE DATABASE " . $db_name;
     if ($conn->query($sql) === TRUE) {
         echo "Database created successfully";
