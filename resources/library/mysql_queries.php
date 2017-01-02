@@ -1,22 +1,14 @@
 <?php
 
-require('../config.php');
+require '../config.php';
 
-$conn = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['password']);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+function user_exists($username, $email) {
+    return FALSE;
 }
 
-if (!database_exists($conn)) {
-    create_database($conn, $config['db']['name']);
+function create_user($username, $email, $password) {
+    return TRUE;
 }
-
-if (!table_exists($conn)) {
-    create_table($conn);
-}
-
-$conn->close();
 
 function create_database($conn, $db_name) {
     $sql = "CREATE DATABASE " . $db_name;
@@ -27,7 +19,7 @@ function create_database($conn, $db_name) {
     }
 }
 
-function create_table($conn) {
+function create_table($conn, $db_name) {
     $sql = "CREATE TABLE users (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
@@ -49,4 +41,5 @@ function database_exists($conn) {
 function table_exist($conn) {
         return false;
 }
+
 ?>

@@ -1,5 +1,9 @@
 <?php
 
+require '../config.php';
+
+require 'mysql_queries.php';
+
 // TODO use isset() to check if these exist
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -11,14 +15,6 @@ if (!user_exists($username, $email)) {
         die("Error: User couldn't be created.");
     }
     echo "User Account Created Successfully";
-}
-
-function user_exists($username, $email) {
-    return FALSE;
-}
-
-function create_user($username, $email, $password) {
-    return TRUE;
 }
 
 ?>
