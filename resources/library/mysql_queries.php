@@ -26,10 +26,9 @@ function create_user($username, $email, $password) {
     VALUES ('$username', '$email', '$password')";
 
     if ($conn->query($sql)) {
-        echo "New record created successfully";
         return TRUE;
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        die("Error: " . $sql . "<br>" . $conn->error);
         return FALSE;
     }
 }
