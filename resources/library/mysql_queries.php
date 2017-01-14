@@ -196,6 +196,19 @@ function find_events_with($start_timestamp, $end_timestamp) {
 }
 // End: 3
 
+// 4
+function num_tickets_sold($event_id) {
+  global $TABLE_BOOKINGS, $TABLE_USERS;
+  $sql = "SELECT count(*) AS count FROM $TABLE_BOOKINGS
+    WHERE event_id = '$event_id' GROUP BY event_id";
+  $result = get_db()->query($sql);
+  $row = $result->fetch_assoc();
+  $count = $row[0];
+  return $count;
+}
+// END: 4
+
+
 function create_event_from_row($r) {
   return Array(
     'host' => $r['user_host'],
