@@ -3,6 +3,8 @@
 require '../config.php';
 
 $TABLE_USERS = $config['tables']['users'];
+$TABLE_EVENTS = 'events';
+$TABLE_BOOKINGS = 'bookings';
 
 function connect_to_db() {
   global $config;
@@ -81,5 +83,100 @@ function database_exists($conn) {
 function table_exists($conn) {
         return false;
 }
+
+// *** EVENT QUERIES ***
+
+function create_event_table($conn) {
+    global $TABLE_EVENTS;
+    $sql = "CREATE TABLE $TABLE_EVENTS (
+      id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      user_host VARCHAR(50) NOT NULL,
+      name VARCHAR(50) NOT NULL,
+      description VARCHAR(30),
+      location VARCHAR(50) NOT NULL,
+      event_date TIMESTAMP NOT NULL,
+      categorisation VARCHAR(50),
+      num_tickets_available VARCHAR(50) NOT NULL,
+      ticket_end_date TIMESTAMP NOT NULL,
+    )";
+
+    if ($conn->query($sql)) {
+        echo "Table $TABLE_EVENTS has been created";
+    } else {
+        echo "Error in making table" . $conn->error;
+    }
+}
+
+function create_event($username, $event_details) {
+  global $TABLE_EVENTS;
+  $sql = "INSERT INTO $TABLE_EVENTS (
+    user_host,
+    name,
+    description,
+    location,
+    event_date,
+    categorisation,
+    num_tickets_available,
+    ticket_end_date
+  ) VALUES ($username,
+    $event_details[name],
+    $event_details[description],
+    $event_details[location],
+    $event_details[event_date],
+    $event_details[categorisation],
+    $event_details[num_tickets_available],
+    $event_details[ticket_end_date]
+  )";
+
+  get_db()->query($sql);
+}
+
+function create_bookings_table($conn) {
+  global $TABLE_BOOKINGS;
+  $sql = "CREATE TABLE $TABLE_BOOKINGS (
+    username VARCHAR(50) NOT NULL,
+    event_id INT(6) UNSIGNED NOT NULL,
+  )";
+
+  if ($conn->query($sql)) {
+      echo "Table $TABLE_BOOKINGS has been created";
+  } else {
+      echo "Error in making table" . $conn->error;
+  }
+}
+
+function register_for_event($username, $event_id) {
+  global $TABLE_BOOKINGS;
+  $sql = "INSERT INTO $TABLE_BOOKINGS (
+    username,
+    event_id
+  ) VALUES (
+    $username,
+    $event_id
+  )";
+
+  get_db()->query($sql);
+}
+
+function get_all_events() {
+  global $TABLE_EVENTS;
+  $sql = "SELECT * FROM $TABLE_EVENTS";
+  $result = get_db()->query($sql);
+  while ($r = $result->fetch_object()){
+        $events[] = Array(
+          'host' => $r['user_host'],
+          'name' => $r['name'],
+          'description' => $r['description'],
+          'location' => $r['location'],
+          'event_date' => $r['event_date'],
+          'categorisation' => $r['categorisation'],
+          'num_tickets_available' => $r['num_tickets_available'],
+          'ticket_end_date' => $r['ticket_end_date']);
+  }
+  $result->close();
+  return $events;
+}
+
+// *** END EVENT QUERIES ***
 
 ?>
