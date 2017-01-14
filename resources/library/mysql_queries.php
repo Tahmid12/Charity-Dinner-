@@ -184,7 +184,15 @@ function find_all_events($category) {
 }
 
 function find_events_with($start_timestamp, $end_timestamp) {
-  // TODO
+  global $TABLE_EVENTS;
+  $sql = "SELECT * FROM $TABLE_EVENTS WHERE event_date
+    BETWEEN FROM_UNIXTIME($start_timestamp) AND FROM_UNIXTIME($end_timestamp)"; // TODO test
+  $result = get_db()->query($sql);
+  while ($r = $result->fetch_object()) {
+    $events[] = create_event_from_row($r);
+  }
+  $result->close();
+  return $events;
 }
 // End: 3
 
