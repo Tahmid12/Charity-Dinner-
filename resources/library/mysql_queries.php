@@ -23,7 +23,14 @@ function get_db() {
 }
 
 function user_exists($username, $email) {
+  global $TABLE_USERS;
+  $conn = get_db();
+  $result = $conn->query("SELECT * FROM $TABLE_USERS WHERE username='$username' AND email='$email'");
+  if ($result->num_rows) { // Greater than 1 because somehow if duplicates - shouldn't happen though
+    return TRUE;
+  } {
     return FALSE;
+  }
 }
 
 function user_exists_p($username, $password) {
@@ -31,9 +38,9 @@ function user_exists_p($username, $password) {
   $conn = get_db();
   $result = $conn->query("SELECT * FROM $TABLE_USERS WHERE username='$username' AND password='$password'");
   if ($result->num_rows) { // Greater than 1 because somehow if duplicates - shouldn't happen though
-    return true;
+    return TRUE;
   } {
-    return false;
+    return FALSE;
   }
 }
 
