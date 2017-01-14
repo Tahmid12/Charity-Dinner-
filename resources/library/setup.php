@@ -20,5 +20,8 @@ if (!table_exists($conn)) {
     create_table($conn, $config['tables']['users']);
 }
 
+create_event_table($conn);
+create_bookings_table($conn);
+
 $conn->close();
 ?>
