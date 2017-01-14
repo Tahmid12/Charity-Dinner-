@@ -95,7 +95,7 @@ function create_event_table($conn) {
       description VARCHAR(30),
       location VARCHAR(50) NOT NULL,
       event_date TIMESTAMP NOT NULL,
-      categorisation VARCHAR(50),
+      category VARCHAR(50),
       num_tickets_available VARCHAR(50) NOT NULL,
       ticket_end_date TIMESTAMP NOT NULL,
     )";
@@ -115,7 +115,7 @@ function create_event($username, $event_details) {
     description,
     location,
     event_date,
-    categorisation,
+    category,
     num_tickets_available,
     ticket_end_date
   ) VALUES ($username,
@@ -123,7 +123,7 @@ function create_event($username, $event_details) {
     $event_details[description],
     $event_details[location],
     $event_details[event_date],
-    $event_details[categorisation],
+    $event_details[category],
     $event_details[num_tickets_available],
     $event_details[ticket_end_date]
   )";
@@ -162,21 +162,42 @@ function get_all_events() {
   global $TABLE_EVENTS;
   $sql = "SELECT * FROM $TABLE_EVENTS";
   $result = get_db()->query($sql);
-  while ($r = $result->fetch_object()){
-        $events[] = Array(
-          'host' => $r['user_host'],
-          'name' => $r['name'],
-          'description' => $r['description'],
-          'location' => $r['location'],
-          'event_date' => $r['event_date'],
-          'categorisation' => $r['categorisation'],
-          'num_tickets_available' => $r['num_tickets_available'],
-          'ticket_end_date' => $r['ticket_end_date']);
+  while ($r = $result->fetch_object()) {
+        $events[] = create_event_from_row($r);
   }
   $result->close();
   return $events;
 }
 
 // *** END EVENT QUERIES ***
+
+// Queries for task 3+
+function find_all_events($category) {
+  global $TABLE_EVENTS;
+  $sql = "SELECT * FROM $TABLE_EVENTS WHERE category = '$category'";
+  $result = get_db()->query($sql);
+  while ($r = $result->fetch_object()) {
+    $events[] = create_event_from_row($r);
+  }
+  $result->close();
+  return $events;
+}
+
+function find_events_with($start_timestamp, $end_timestamp) {
+  // TODO
+}
+// End: 3
+
+function create_event_from_row($r) {
+  return Array(
+    'host' => $r['user_host'],
+    'name' => $r['name'],
+    'description' => $r['description'],
+    'location' => $r['location'],
+    'event_date' => $r['event_date'],
+    'category' => $r['category'],
+    'num_tickets_available' => $r['num_tickets_available'],
+    'ticket_end_date' => $r['ticket_end_date']);
+}
 
 ?>
