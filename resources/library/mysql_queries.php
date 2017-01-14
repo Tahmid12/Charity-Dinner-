@@ -208,6 +208,34 @@ function num_tickets_sold($event_id) {
 }
 // END: 4
 
+// 5
+function find_events_for_user($username) {
+  global $TABLE_BOOKINGS, $TABLE_EVENTS;
+  $sql = "SELECT * FROM $TABLE_BOOKINGS
+    WHERE username = '$username'
+    JOIN $TABLE_EVENTS ON $TABLE_BOOKINGS.event_id = $TABLE_EVENTS.event_id";
+  $result = get_db()->query($sql);
+  while ($r = $result->fetch_object()) {
+    $events[] = create_event_from_row($r);
+  }
+  $result->close();
+  return $events;
+}
+
+function find_imminent_events() {
+  global $TABLE_BOOKINGS, $TABLE_EVENTS, $TABLE_USERS;
+  $sql = "SELECT $TABLE_USERS.email, $TABLE_EVENTS.* FROM $TABLE_BOOKINGS
+    JOIN $TABLE_EVENTS ON $TABLE_BOOKINGS.event_id = $TABLE_EVENTS.event_id
+    JOIN $TABLE_USERS ON $TABLE_BOOKINGS.username = $TABLE_USERS.username";
+
+  $result = get_db()->query($sql);
+  while ($r = $result->fetch_object()) {
+    $email_event_tuple[] = array($r['email'], create_event_from_row($r));
+  }
+  $result->close();
+  return $email_event_tuple;
+}
+// END: 5
 
 function create_event_from_row($r) {
   return Array(
