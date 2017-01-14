@@ -2,6 +2,8 @@
 
 require '../config.php';
 
+$TABLE_USERS = $config['tables']['users'];
+
 function connect_to_db() {
   global $config;
   return new mysqli($config['db']['host'], $config['db']['user'], $config['db']['password']);
@@ -14,6 +16,19 @@ function default_db($conn) {
 
 function user_exists($username, $email) {
     return FALSE;
+}
+
+function user_exists_p($username, $password) {
+  global $TABLE_USERS;
+  $conn = connect_to_db();
+  default_db($conn);
+
+  $result = $conn->query("SELECT * FROM $TABLE_USERS WHERE username='$username' AND password='$password'");
+  if ($result->num_rows) { // Greater than 1 because somehow if duplicates - shouldn't happen though
+    return true;
+  } {
+    return false;
+  }
 }
 
 function create_user($username, $email, $password) {

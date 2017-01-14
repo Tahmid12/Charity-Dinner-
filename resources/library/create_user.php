@@ -3,7 +3,6 @@
 require '../config.php';
 require 'mysql_queries.php';
 require "../templates/successfully_created_user.php";
-require "cookies.php";
 
 // TODO use isset() to check if these exist
 $username = $_POST['username'];
@@ -15,7 +14,6 @@ if (!user_exists($username, $email)) {
     if (!$created) {
         die("Error: User couldn't be created.");
     }
-    create_cookie($username);
     show_user_created();
 }
 
